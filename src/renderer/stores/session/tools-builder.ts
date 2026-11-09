@@ -37,6 +37,7 @@ import {
   isViewImageAvailable,
   withImageFileReading,
 } from '@/packages/model-calls/toolsets/view-image'
+import { WEB_FETCH_TOOL_NAME, webFetchTool } from '@/packages/model-calls/toolsets/web-fetch'
 import { parseLinkTool, webSearchTool } from '@/packages/model-calls/toolsets/web-search'
 import { buildWorkspaceInstructions } from '@/packages/model-calls/workspace-instructions'
 import { skillsController, subscribeSkillsChanged } from '@/packages/skills/controller'
@@ -447,6 +448,9 @@ When you create a Git commit that includes code changes, append this exact trail
     // Validation (Pro for build-in, API key for third parties) happens at execution time.
     if (includeParseLinkTool) {
       tools.parse_link = parseLinkTool
+    } else if (platform.type === 'mobile') {
+      // Native HTTP has no CORS limit, so mobile can read pages without a parse_link provider or MCP server.
+      tools[WEB_FETCH_TOOL_NAME] = webFetchTool
     }
   }
 

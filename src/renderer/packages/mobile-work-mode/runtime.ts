@@ -15,6 +15,7 @@ import type { ToolSet } from 'ai'
 import { currentBlobStorage } from '@/adapters/CurrentBlobStorage'
 import { rendererApplication } from '@/app/renderer-application'
 import { prepareMobileMCPTools } from '@/packages/mcp/mobile-tools'
+import { WEB_FETCH_TOOL_NAME, webFetchTool } from '@/packages/model-calls/toolsets/web-fetch'
 import { parseLinkTool, webSearchTool } from '@/packages/model-calls/toolsets/web-search'
 import { PROVIDERS_WITH_PARSE_LINK } from '@/packages/web-search'
 import platform from '@/platform'
@@ -61,6 +62,7 @@ export function buildMobileWebTools(model: ModelInterface, enabled: boolean) {
   const includeParseLink = PROVIDERS_WITH_PARSE_LINK.has(settingActions.getExtensionSettings().webSearch.provider)
   tools.web_search = webSearchTool
   if (includeParseLink) tools.parse_link = parseLinkTool
+  else tools[WEB_FETCH_TOOL_NAME] = webFetchTool
   return { tools }
 }
 
